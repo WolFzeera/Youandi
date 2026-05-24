@@ -1,0 +1,2771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Um espaço digital minimalista e imersivo sobre a nossa sintonia com Letícia.">
+    <title>Leo & Letícia — A Nossa Sintonia</title>
+    
+    <!-- Favicon Gótico SVG -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    
+    <!-- Fontes Premium: Cinzel para cabeçalhos e Lora para crônicas manuscritas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --------------------------------------------------
+           SISTEMA DE DESIGN: PALETA DAS SOMBRAS (60-30-10)
+           -------------------------------------------------- */
+        :root {
+            --bg-obsidian: #000000;
+            --bg-candlelight-glow: radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.12) 0%, #000000 85%);
+            
+            --text-primary: #ffffff; /* Branco puro */
+            --text-secondary: rgba(255, 255, 255, 0.65); /* Branco translúcido para contraste */
+            
+            --accent-purple: #581c87; /* Roxo escuro gótico */
+            --accent-glow: #a855f7; /* Roxo brilhante */
+            --border-purple: rgba(88, 28, 135, 0.25);
+            
+            --font-serif: 'Cinzel', serif;
+            --font-manuscript: 'Lora', serif;
+            
+            --transition-slow: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-medium: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-fast: all 0.25s ease;
+        }
+
+        /* Fundo de Galáxia Gótica Animada (Roxo e Azul) */
+        .gothic-galaxy-bg {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 40% 40%, rgba(88, 28, 135, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 60% 60%, rgba(29, 78, 216, 0.11) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.08) 0%, transparent 60%);
+            filter: blur(40px);
+            animation: rotateGalaxy 120s linear infinite;
+        }
+
+        @keyframes rotateGalaxy {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Reset e Configurações de Toque (Mobile-First) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            background-image: var(--bg-candlelight-glow);
+            color: var(--text-primary);
+            font-family: var(--font-manuscript);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: breatheGlow 15s ease-in-out infinite alternate;
+        }
+
+        /* Canvas de Cinzas Flutuantes */
+        #embers-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Efeito de Vinheta Gótica (Bordas Escurecidas) */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.95) 98%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --------------------------------------------------
+           LAYOUT & ESTRUTURA GÓTICA
+           -------------------------------------------------- */
+        
+        main {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem 1.5rem 6rem;
+            z-index: 3;
+            position: relative;
+        }
+
+        /* Efeito Fade-In-Up para Seções na Rolagem */
+        .fade-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.4s cubic-bezier(0.25, 1, 0.5, 1), transform 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+            margin-bottom: 7rem;
+        }
+
+        .fade-section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Introdução Poética (Altar Inicial) */
+        .altar-intro {
+            text-align: center;
+            padding: 5rem 1rem 3rem;
+        }
+
+        .gothic-title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.35rem;
+            min-height: 4rem;
+            perspective: 800px;
+            margin-bottom: 0.2rem;
+        }
+
+        .falling-letter {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--text-primary);
+            opacity: 0;
+            display: inline-block;
+            transform-origin: center bottom;
+            cursor: pointer;
+            transition: text-shadow 0.3s ease, color 0.3s ease;
+        }
+
+        @keyframes fallClumsy {
+            0% { 
+                transform: translateY(-200px) rotate(-65deg) scale(2); 
+                opacity: 0; 
+                filter: blur(5px);
+            }
+            45% { 
+                transform: translateY(35px) rotate(20deg) scale(1.3); 
+                opacity: 0.7; 
+                filter: blur(2px);
+            }
+            70% { 
+                transform: translateY(-15px) rotate(-15deg) scale(0.9); 
+                opacity: 0.9;
+                filter: blur(0px);
+            }
+            85% { 
+                transform: translateY(8px) rotate(8deg) scale(1.05); 
+            }
+            100% { 
+                transform: translateY(0) rotate(0deg) scale(1); 
+                opacity: 1; 
+                text-shadow: 0 0 15px var(--accent-glow), 0 0 30px rgba(168, 85, 247, 0.6); 
+                color: #ffffff; 
+            }
+        }
+
+        .altar-subtitle {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .altar-divider {
+            margin: 2rem auto;
+            color: var(--accent-purple);
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            letter-spacing: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0.6;
+        }
+
+        .altar-divider::before,
+        .altar-divider::after {
+            content: '';
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+        }
+
+        /* Seções e Cabeçalhos de Seção */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(88, 28, 135, 0.2);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* --------------------------------------------------
+           MÓDULO 1: AS FOLHAS DO PRISMA (MOMENTOS)
+           -------------------------------------------------- */
+
+        /* Moldura de Arco Gótico (Ogiva) */
+        .gothic-arch-frame {
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 0 25px rgba(88, 28, 135, 0.4), inset 0 0 15px rgba(0,0,0,0.8);
+            overflow: hidden;
+            position: relative;
+            background: #020202;
+            transition: var(--transition-medium);
+        }
+
+        .gothic-arch-frame:hover {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
+            transform: scale(1.02);
+        }
+
+        .gothic-arch-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.18) contrast(1.05) brightness(0.8);
+            transition: var(--transition-slow);
+        }
+
+        .gothic-arch-frame:hover .gothic-arch-img {
+            filter: sepia(0.05) contrast(1.1) brightness(0.92);
+        }
+
+        /* Coração Gótico Interativo */
+        .gothic-heart-container {
+            width: 120px;
+            height: 120px;
+            margin: 0.2rem auto 0.8rem;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: filter 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(88, 28, 135, 0.2));
+        }
+
+        .gothic-heart-container:hover {
+            filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.6));
+        }
+
+        .gothic-heart-svg {
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Deixa cliques irem para a div */
+            transform-origin: center center;
+            transition: transform 0.1s ease;
+        }
+
+        /* Animação de Batimento Cardíaco (Double Beat) */
+        .gothic-heart-container.beating .gothic-heart-svg {
+            animation: heartbeatAnim 0.6s ease-in-out;
+        }
+
+        @keyframes heartbeatAnim {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.15); }
+            45% { transform: scale(1.05); }
+            65% { transform: scale(1.22); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-core-path {
+            animation: corePulse 3s ease-in-out infinite alternate;
+            transform-origin: 50% 50%;
+        }
+
+        @keyframes corePulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; filter: brightness(1.15); }
+        }
+
+        /* Conteiner de Momentos */
+        #prisma-moments-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            width: 100%;
+            margin-top: 3.5rem;
+        }
+
+        .moment-card {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 2.5rem 2rem;
+            animation: borderBreathe 6s ease-in-out infinite alternate;
+        }
+
+        @media (min-width: 650px) {
+            .moment-card {
+                flex-direction: row;
+                align-items: center;
+                gap: 3rem;
+                text-align: left;
+            }
+            .moment-image-col {
+                flex: 0 0 140px;
+            }
+            .moment-content-col {
+                flex: 1;
+            }
+        }
+
+        .small-arch {
+            width: 140px;
+            height: 200px;
+            border-radius: 70px 70px 0 0;
+            margin: 0 auto;
+            cursor: zoom-in;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), 0 0 15px rgba(88,28,135,0.25);
+        }
+
+        .small-arch:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.9), 0 0 20px rgba(168,85,247,0.45);
+        }
+
+        /* --------------------------------------------------
+           MÓDULO 2: DECODIFICADOR & PLAYER DE VINIL
+           -------------------------------------------------- */
+
+        /* Grid Simétrico de Conexão */
+        .sintonia-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 600px) {
+            .sintonia-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Cartões Glassmorphic Gótico */
+        .glass-card {
+            background: rgba(10, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-purple);
+            border-radius: 12px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(88, 28, 135, 0.03);
+            transition: var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+            animation: borderBreathe 6s ease-in-out infinite alternate;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(88, 28, 135, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 15px rgba(88, 28, 135, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card-header-decor {
+            font-family: var(--font-serif);
+            font-size: 0.9rem;
+            color: var(--accent-purple);
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            opacity: 0.6;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            letter-spacing: 0.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .card-text {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            transition: var(--transition-medium);
+        }
+
+        .glass-card:hover .card-text {
+            color: var(--text-primary);
+        }
+
+        /* Simulador de Player de Vinil */
+        .vinyl-container {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        @media (min-width: 500px) {
+            .vinyl-container {
+                flex-direction: row;
+                justify-content: center;
+                gap: 3rem;
+            }
+        }
+
+        /* O Disco de Vinil */
+        .vinyl-disk-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0;
+        }
+
+        /* O Disco de Vinil e Sleeve (Capa) */
+        .vinyl-sleeve-wrapper {
+            position: relative;
+            width: 220px;
+            height: 140px;
+            flex-shrink: 0;
+            perspective: 800px;
+        }
+
+        .vinyl-sleeve {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 140px;
+            height: 140px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-purple);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            z-index: 4;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+            transform-origin: center center;
+        }
+
+        .vinyl-sleeve img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(0.25) contrast(1.1) brightness(0.75);
+            transition: filter 0.5s ease;
+        }
+
+        .vinyl-sleeve:hover img {
+            filter: grayscale(0.1) contrast(1.15) brightness(0.85);
+        }
+
+        .vinyl-sleeve.swapping-out {
+            transform: scale(0.7) rotateY(-90deg);
+            opacity: 0;
+        }
+
+        .vinyl-sleeve.swapping-prep {
+            transform: scale(0.7) rotateY(90deg);
+            opacity: 0;
+            transition: none !important;
+        }
+
+        .vinyl-disk-slide-wrapper {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 130px;
+            height: 130px;
+            z-index: 3;
+            transform: translateX(25px); /* Halfway out when paused */
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+        }
+
+        .vinyl-disk-slide-wrapper.slide-out {
+            transform: translateX(0) scale(0.8);
+            opacity: 0;
+        }
+
+        .vinyl-disk-slide-wrapper.slide-in-prep {
+            transform: translateX(0) scale(0.8);
+            opacity: 0;
+            transition: none !important;
+        }
+
+        .vinyl-disk-slide-wrapper.active-slide {
+            transform: translateX(65px);
+        }
+
+        .vinyl-disk {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0c0414 5%, #000000 20%, #150924 40%, #000000 60%, #000000 80%);
+            border-radius: 50%;
+            border: 2px solid #1a0b2e;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Sulcos do Vinil */
+        .vinyl-disk::after {
+            content: '';
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px double rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Rótulo Central */
+        .vinyl-label {
+            width: 44px;
+            height: 44px;
+            background: radial-gradient(circle, #a855f7 0%, #581c87 70%, #050505 100%);
+            border-radius: 50%;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            position: relative;
+            transition: background 0.6s ease;
+        }
+
+        .vinyl-center-hole {
+            width: 8px;
+            height: 8px;
+            background: var(--bg-obsidian);
+            border-radius: 50%;
+        }
+
+        /* Playlist Estilo Mini Capa (Quadrados) */
+        .queue-container {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .queue-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .queue-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .queue-sleeve-wrapper {
+            position: relative;
+            width: 110px;
+            height: 80px;
+            overflow: visible;
+            margin-bottom: 0.6rem;
+        }
+
+        .queue-sleeve {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 2;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-purple);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: var(--transition-medium);
+        }
+
+        .queue-sleeve img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(0.3) contrast(1.1) brightness(0.7);
+            transition: filter 0.3s ease;
+        }
+
+        .queue-disk {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0c0414 5%, #000000 20%, #000000 80%);
+            border: 1px solid #1a0b2e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            z-index: 1;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateX(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .queue-label {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #000;
+        }
+
+        /* Hover animations for queue items */
+        .queue-item:hover .queue-sleeve {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .queue-item:hover .queue-sleeve img {
+            filter: grayscale(0.1) contrast(1.1) brightness(0.8);
+        }
+
+        .queue-item:hover .queue-disk {
+            transform: translateX(25px) rotate(45deg);
+        }
+
+        .queue-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .queue-title {
+            display: block;
+            font-family: var(--font-serif);
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100px;
+            margin-bottom: 0.1rem;
+        }
+
+        .queue-artist {
+            display: block;
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100px;
+        }
+
+        .queue-item:hover .queue-title {
+            color: var(--text-primary);
+            text-shadow: 0 0 8px rgba(255,255,255,0.15);
+        }
+
+        @media (max-width: 500px) {
+            .vinyl-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .vinyl-sleeve-wrapper {
+                width: 200px;
+                height: 130px;
+                margin-bottom: 1rem;
+            }
+            .vinyl-sleeve {
+                width: 130px;
+                height: 130px;
+            }
+            .vinyl-disk-slide-wrapper {
+                width: 120px;
+                height: 120px;
+                top: 5px;
+                left: 5px;
+                transform: translateX(15px);
+            }
+            .vinyl-disk-slide-wrapper.active-slide {
+                transform: translateX(55px);
+            }
+            .queue-container {
+                gap: 0.8rem;
+            }
+            .queue-sleeve-wrapper {
+                width: 90px;
+                height: 65px;
+            }
+            .queue-sleeve {
+                width: 65px;
+                height: 65px;
+            }
+            .queue-disk {
+                width: 57px;
+                height: 57px;
+                left: 4px;
+                top: 4px;
+                transform: translateX(8px);
+            }
+            .queue-label {
+                width: 18px;
+                height: 18px;
+            }
+            .queue-item:hover .queue-disk {
+                transform: translateX(18px) rotate(45deg);
+            }
+            .queue-title {
+                width: 80px;
+                font-size: 0.72rem;
+            }
+            .queue-artist {
+                width: 80px;
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Braço do Tocador */
+        .vinyl-arm {
+            position: absolute;
+            top: -10px;
+            right: 0px;
+            width: 60px;
+            height: 70px;
+            border-right: 3px solid #581c87;
+            border-top: 3px solid #581c87;
+            border-radius: 0 10px 0 0;
+            transform-origin: top right;
+            transform: rotate(-25deg);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .vinyl-arm::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -5px;
+            width: 12px;
+            height: 16px;
+            background: #000000;
+            border: 1px solid #581c87;
+            transform: rotate(45deg);
+        }
+
+        /* Animação do Vinil Girando */
+        @keyframes spinVinyl {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spinVinyl 3.5s linear infinite;
+        }
+
+        .arm-active {
+            transform: rotate(5deg);
+        }
+
+        /* Informações e Controles do Player */
+        .player-info {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .track-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            letter-spacing: 0.05rem;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            text-align: center;
+        }
+
+        @media (min-width: 500px) {
+            .track-title {
+                text-align: left;
+            }
+        }
+
+        .track-artist {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        @media (min-width: 500px) {
+            .track-artist {
+                text-align: left;
+            }
+        }
+
+        /* Letras de Música Sincronizadas */
+        .lyrics-container {
+            width: 100%;
+            height: 112px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 1.2rem;
+            margin-bottom: 0.8rem;
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+        }
+
+        .lyrics-scroll {
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .lyrics-line {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.3);
+            min-height: 32px;
+            line-height: 32px;
+            transition: all 0.35s ease;
+            transform: scale(0.92);
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lyrics-line.active {
+            color: #ffffff;
+            opacity: 1;
+            transform: scale(1.07);
+            text-shadow: 0 0 12px rgba(168, 85, 247, 0.7), 0 0 24px rgba(168, 85, 247, 0.3);
+            font-weight: 500;
+        }
+
+        /* Controles do Player */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            width: 100%;
+        }
+
+        .btn-play-pause {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(88, 28, 135, 0.1);
+            border: 1px solid var(--accent-purple);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-medium);
+            flex-shrink: 0;
+        }
+
+        .btn-play-pause:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(88, 28, 135, 0.6);
+        }
+
+        .play-icon, .pause-icon {
+            fill: var(--text-primary);
+            transition: var(--transition-fast);
+        }
+
+        .btn-play-pause:hover .play-icon,
+        .btn-play-pause:hover .pause-icon {
+            fill: #fff;
+        }
+
+        .pause-icon {
+            display: none;
+        }
+
+        /* Barra de Progresso */
+        .progress-bar-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(88, 28, 135, 0.15);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: height 0.2s ease;
+        }
+
+        .progress-track:hover {
+            height: 9px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-glow));
+            transition: width 0.1s linear;
+            pointer-events: none;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: var(--font-serif);
+        }
+
+        /* Controle de Volume */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            margin-top: 0.6rem;
+        }
+
+        .volume-icon {
+            fill: var(--text-secondary);
+            flex-shrink: 0;
+            transition: fill 0.2s ease;
+        }
+
+        .volume-icon:hover {
+            fill: var(--accent-glow);
+        }
+
+        input[type="range"].volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            flex-grow: 1;
+            height: 3px;
+            background: rgba(88, 28, 135, 0.15);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            transition: height 0.2s ease;
+        }
+
+        input[type="range"].volume-slider:hover {
+            height: 5px;
+        }
+
+        input[type="range"].volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        input[type="range"].volume-slider::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+            transform: scale(1.2);
+        }
+
+        input[type="range"].volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+        }
+
+        input[type="range"].volume-slider::-webkit-slider-runnable-track {
+            background: linear-gradient(90deg, var(--accent-purple) var(--vol-pct, 50%), rgba(88, 28, 135, 0.15) var(--vol-pct, 50%));
+            border-radius: 2px;
+        }
+
+        /* --------------------------------------------------
+           MÓDULO 3: O RELICÁRIO DESFOCADO (HORIZONTE)
+           -------------------------------------------------- */
+
+        .relicario-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 600px) {
+            .relicario-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Cartões de Slots Bloqueados */
+        .locked-slot {
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .slot-blur-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 28, 135, 0.08);
+            filter: blur(8px);
+            background: rgba(10, 5, 5, 0.7);
+            z-index: 1;
+            transition: var(--transition-medium);
+        }
+
+        /* Borda Carmem Bem Tênue Interna */
+        .locked-slot::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 28, 135, 0.05);
+            pointer-events: none;
+            z-index: 3;
+            transition: var(--transition-medium);
+        }
+
+        .locked-slot:hover::after {
+            border-color: rgba(88, 28, 135, 0.3);
+            box-shadow: inset 0 0 15px rgba(88, 28, 135, 0.05);
+        }
+
+        .locked-slot:hover .slot-blur-layer {
+            filter: blur(5px);
+            background: rgba(15, 7, 7, 0.75);
+        }
+
+        /* Ícone de Cadeado Gótico */
+        .lock-container {
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(5,5,5,0.9);
+            border: 1px solid rgba(88, 28, 135, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: var(--transition-medium);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .lock-icon-svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+            transition: var(--transition-medium);
+        }
+
+        .slot-title {
+            z-index: 2;
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            letter-spacing: 0.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            transition: var(--transition-medium);
+            padding: 0 1rem;
+        }
+
+        .slot-status {
+            z-index: 2;
+            font-family: var(--font-serif);
+            font-size: 0.7rem;
+            letter-spacing: 0.15rem;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            border: 1px solid rgba(88, 28, 135, 0.2);
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px;
+            transition: var(--transition-medium);
+        }
+
+        /* Efeitos ao Pairar */
+        .locked-slot:hover .lock-container {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+            transform: scale(1.08);
+            animation: shakeLock 0.45s ease;
+        }
+
+        .locked-slot:hover .lock-icon-svg {
+            fill: var(--accent-glow);
+            filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.4));
+        }
+
+        .locked-slot:hover .slot-title {
+            color: var(--text-primary);
+            text-shadow: 0 0 5px rgba(255,255,255,0.1);
+        }
+
+        .locked-slot:hover .slot-status {
+            color: var(--accent-glow);
+            border-color: var(--accent-glow);
+        }
+
+        /* --------------------------------------------------
+           SISTEMA DE MODAIS DINÂMICOS GÓTICOS
+           -------------------------------------------------- */
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 3, 5, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 1.2rem;
+        }
+
+        .modal-overlay.active-modal {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Placa Glassmorphic Central */
+        .modal-container {
+            background: rgba(10, 5, 5, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-purple);
+            border-radius: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 30px rgba(88, 28, 135, 0.1);
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active-modal .modal-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2.2rem;
+            cursor: pointer;
+            z-index: 10;
+            line-height: 1;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close-btn:hover {
+            color: var(--accent-glow);
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        /* Estrutura do Modal do Prisma (Com Imagem) */
+        .modal-layout-split {
+            display: flex;
+            flex-direction: column;
+            min-height: 380px;
+        }
+
+        @media (min-width: 600px) {
+            .modal-layout-split {
+                flex-direction: row;
+            }
+        }
+
+        .modal-image-wrapper {
+            flex: 1;
+            position: relative;
+            background: #020202;
+            overflow: hidden;
+            min-height: 220px;
+        }
+
+        @media (min-width: 600px) {
+            .modal-image-wrapper {
+                min-height: 380px;
+            }
+        }
+
+        .modal-img-element {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(0.25) contrast(1.1) brightness(0.65);
+            transition: var(--transition-slow);
+        }
+
+        .modal-container:hover .modal-img-element {
+            filter: sepia(0.15) contrast(1.15) brightness(0.75);
+            transform: scale(1.04);
+        }
+
+        .modal-image-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 40%, rgba(10,5,5,0.95)),
+                        linear-gradient(to right, transparent 60%, rgba(10,5,5,0.95));
+            pointer-events: none;
+        }
+
+        @media (max-width: 599px) {
+            .modal-image-overlay {
+                background: linear-gradient(to bottom, transparent 30%, rgba(10,5,5,0.95));
+            }
+        }
+
+        /* Conteúdo de Texto do Modal */
+        .modal-text-wrapper {
+            flex: 1.1;
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .modal-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            letter-spacing: 0.15rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .modal-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1rem 0;
+            color: var(--accent-purple);
+            font-size: 0.9rem;
+        }
+
+        .modal-divider::before,
+        .modal-divider::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+        }
+
+        .modal-body {
+            font-family: var(--font-manuscript);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-style: italic;
+            opacity: 0.95;
+        }
+
+        /* Modal do Relicário (Texto Centralizado) */
+        .modal-layout-center {
+            padding: 4rem 2.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-center-decor {
+            font-size: 1.8rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(88, 28, 135, 0.4);
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        .modal-body-center {
+            font-family: var(--font-manuscript);
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            font-style: italic;
+            max-width: 480px;
+        }
+
+        /* --------------------------------------------------
+           RODAPÉ
+           -------------------------------------------------- */
+        .gothic-footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            font-family: var(--font-serif);
+            font-size: 0.75rem;
+            letter-spacing: 0.15rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(88, 28, 135, 0.05);
+            width: 100%;
+            z-index: 3;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        /* --------------------------------------------------
+           KEYFRAMES / ANIMAÇÕES
+           -------------------------------------------------- */
+
+        /* Oscilação de Luz de Vela (Aura de Fundo) */
+        @keyframes breatheGlow {
+            0% { background-position: 45% 45%; }
+            100% { background-position: 55% 55%; }
+        }
+
+        /* Rotação dos anéis dos nós */
+        @keyframes spinNode {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Brilho Pulsante Carmim */
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; text-shadow: 0 0 5px rgba(88, 28, 135, 0.5); }
+            100% { opacity: 1; text-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 25px rgba(88, 28, 135, 0.4); }
+        }
+
+        /* Vibração do Cadeado */
+        @keyframes shakeLock {
+            0% { transform: scale(1.08) rotate(0deg); }
+            20% { transform: scale(1.08) rotate(-10deg); }
+            40% { transform: scale(1.08) rotate(8deg); }
+            60% { transform: scale(1.08) rotate(-6deg); }
+            80% { transform: scale(1.08) rotate(4deg); }
+            100% { transform: scale(1.08) rotate(0deg); }
+        }
+
+        /* Estilo do Cronômetro em Blocos */
+        .gothic-timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1.5rem auto 1rem;
+            max-width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .timer-block {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(88, 28, 135, 0.4);
+            box-shadow: 0 0 15px rgba(88, 28, 135, 0.15);
+            border-radius: 8px;
+            padding: 0.5rem 0.7rem;
+            min-width: 70px;
+            text-align: center;
+            transition: var(--transition-medium);
+            animation: borderBreathe 6s ease-in-out infinite alternate;
+        }
+
+        .timer-block:hover {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .timer-val {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-glow);
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+            line-height: 1.2;
+            display: block;
+        }
+
+        .timer-lbl {
+            font-family: var(--font-serif);
+            font-size: 0.65rem;
+            color: #ffffff;
+            opacity: 0.85;
+            letter-spacing: 0.08rem;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        /* Diálogos Góticos em Modais */
+        .chat-dialogue {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-family: var(--font-manuscript);
+            text-align: left;
+        }
+        .chat-author {
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        .chat-author.princesa {
+            color: var(--accent-glow);
+            text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
+        }
+        .chat-author.leo {
+            color: var(--text-primary);
+        }
+        .chat-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-family: var(--font-serif);
+            margin-left: 0.6rem;
+            font-weight: normal;
+        }
+        .chat-text {
+            font-style: italic;
+            display: block;
+            padding-left: 0.8rem;
+            border-left: 1px solid rgba(88,28,135,0.2);
+            color: var(--text-primary);
+        }
+
+        /* Iluminação Dinâmica Interativa */
+        .mouse-candle-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 2;
+            background: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(88, 28, 135, 0.08) 0%, transparent 100%);
+            transition: background 0.1s ease;
+        }
+
+        /* Respiração lenta das bordas */
+        @keyframes borderBreathe {
+            0% { 
+                border-color: rgba(88, 28, 135, 0.15); 
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(88, 28, 135, 0.02); 
+            }
+            100% { 
+                border-color: rgba(88, 28, 135, 0.32); 
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(88, 28, 135, 0.06), inset 0 0 20px rgba(88, 28, 135, 0.04); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo de Galáxia Gótica Animada (Roxo e Azul) -->
+    <div class="gothic-galaxy-bg"></div>
+
+    <!-- Iluminação Interativa -->
+    <div class="mouse-candle-glow"></div>
+    
+    <!-- Canvas de Partículas (Cinzas / Brasas) -->
+    <canvas id="embers-canvas"></canvas>
+    <div class="vignette"></div>
+
+    <main>
+        <!-- MÓDULO 1: O ALTAR DO AGORA (INÍCIO IMERSIVO) -->
+        <section id="altar" class="altar-intro fade-section">
+            <div class="gothic-title-container" id="falling-title-container"></div>
+            
+            <!-- Coração Gótico Interativo -->
+            <div class="gothic-heart-container" id="gothic-heart-btn" onclick="pulseHeart(event)">
+                <svg class="gothic-heart-svg" viewBox="0 0 100 100">
+                    <!-- Sombra/Brilho Roxo Externo -->
+                    <path class="heart-glow-path" d="M50 22 C35 2 5 7 5 42 C5 72 40 87 50 100 C60 87 95 72 95 42 C95 7 65 2 50 22 Z" fill="rgba(88, 28, 135, 0.25)" />
+                    <!-- Corpo de Ferro Escuro do Coração -->
+                    <path class="heart-body-path" d="M50 25 C37 5 8 10 8 42 C8 68 42 82 50 95 C58 82 92 68 92 42 C92 10 63 5 50 25 Z" fill="url(#iron-grad)" stroke="#581c87" stroke-width="1.5" />
+                    <!-- Núcleo de Brasa Roxo Pulsante -->
+                    <path class="heart-core-path" d="M50 33 C42 20 20 22 20 42 C20 58 45 68 50 78 C55 68 80 58 80 42 C80 22 58 20 50 33 Z" fill="url(#crimson-grad)" />
+                    
+                    <defs>
+                        <!-- Gradiente Ferro Escuro -->
+                        <radialGradient id="iron-grad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#1c1313" />
+                            <stop offset="60%" stop-color="#0a0505" />
+                            <stop offset="100%" stop-color="#020202" />
+                        </radialGradient>
+                        <!-- Gradiente Brasa Roxo -->
+                        <radialGradient id="crimson-grad" cx="50%" cy="40%" r="50%">
+                            <stop offset="0%" stop-color="#c084fc" />
+                            <stop offset="30%" stop-color="#581c87" />
+                            <stop offset="85%" stop-color="#2e1049" />
+                            <stop offset="100%" stop-color="transparent" />
+                        </radialGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <p class="altar-subtitle" id="santuario-subtitle">A nossa frequência, gravada no tempo.</p>
+            <div class="gothic-timer-container" id="tempo-contador">Carregando registro das horas...</div>
+        </section>
+
+        <!-- NOSSOS MOMENTOS -->
+        <section id="prisma" class="fade-section">
+            <div class="section-header">
+                <h2 class="section-title">Momentos</h2>
+            </div>
+            
+            <div id="prisma-moments-container">
+                <!-- Preenchido dinamicamente via JavaScript -->
+            </div>
+        </section>
+
+        <!-- SINTONIA -->
+        <section id="decodificador" class="fade-section">
+            <div class="section-header">
+                <h2 class="section-title">Sintonia</h2>
+            </div>
+
+            <!-- Grid de Crônicas Góticas -->
+            <div class="sintonia-grid">
+                <!-- Card 1 -->
+                <div class="glass-card">
+                    <h3 class="card-title" id="cronica-t1"></h3>
+                    <p class="card-text" id="cronica-b1"></p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="glass-card">
+                    <h3 class="card-title" id="cronica-t2"></h3>
+                    <p class="card-text" id="cronica-b2"></p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="glass-card">
+                    <h3 class="card-title" id="cronica-t3"></h3>
+                    <p class="card-text" id="cronica-b3"></p>
+                </div>
+            </div>
+
+            <!-- Reprodutor de Vinil Gótico -->
+            <div class="glass-card vinyl-container">
+                <div class="vinyl-sleeve-wrapper">
+                    <!-- Capa do Vinil (Sleeve) -->
+                    <div class="vinyl-sleeve" id="player-vinyl-sleeve">
+                        <img id="player-cover-art" src="" alt="Capa de Vinil">
+                    </div>
+                    <!-- Disco de Vinil com Wrapper de Deslizamento -->
+                    <div class="vinyl-disk-slide-wrapper" id="vinyl-disk-slide">
+                        <div class="vinyl-disk" id="vinyl-disk">
+                            <div class="vinyl-label" id="vinyl-disk-label">
+                                <div class="vinyl-center-hole"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vinyl-arm" id="vinyl-arm"></div>
+                </div>
+                
+                <div class="player-info">
+                    <h3 class="track-title" id="player-track-title">Pixelated Kisses</h3>
+                    <p class="track-artist" id="player-track-artist">Joji</p>
+                    
+                    <div class="player-controls">
+                        <!-- Play/Pause Button -->
+                        <button class="btn-play-pause" id="play-pause-btn" onclick="toggleVirtualPlayer()" aria-label="Play/Pause">
+                            <!-- Play Icon -->
+                            <svg class="play-icon" id="play-icon" width="14" height="16" viewBox="0 0 14 16">
+                                <path d="M0 0v16l14-8z"/>
+                            </svg>
+                            <!-- Pause Icon -->
+                            <svg class="pause-icon" id="pause-icon" width="12" height="16" viewBox="0 0 12 16">
+                                <path d="M0 0h4v16H0zm8 0h4v16H8z"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Progresso Estético / Seekable -->
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-track" id="progress-track">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="time-display">
+                                <span id="current-time">0:00</span>
+                                <span id="total-time">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controle de Volume -->
+                    <div class="volume-control">
+                        <svg class="volume-icon" id="volume-icon" onclick="toggleMute()" style="cursor:pointer;" width="18" height="18" viewBox="0 0 24 24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                        </svg>
+                        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.02" value="0.5" oninput="setVolume(this.value)">
+                    </div>
+
+                    <!-- Letras de Música Sincronizadas -->
+                    <div class="lyrics-container">
+                        <div class="lyrics-scroll" id="lyrics-scroll"></div>
+                    </div>
+
+                    <!-- Fila de Reprodução (3 Quadrados com Capa e Nome) -->
+                    <div class="queue-container" id="queue-container">
+                        <!-- Preenchido dinamicamente via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 3: O RELICÁRIO DESFOCADO (HORIZONTE) -->
+        <section id="relicario" class="fade-section">
+            <div class="section-header">
+                <h2 class="section-title">Futuro</h2>
+            </div>
+
+            <!-- Grid de Slots Desfocados -->
+            <div class="relicario-grid">
+                <!-- Slot 1 -->
+                <div class="locked-slot" onclick="openLockedModal('slot1')">
+                    <div class="slot-blur-layer"></div>
+                    <div class="lock-container">
+                        <svg class="lock-icon-svg" viewBox="0 0 24 24">
+                            <path d="M12 2C9.24 2 7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5zm-3 5c0-1.66 1.34-3 3-3s3 1.34 3 3v3H9V7zm3 9c-.83 0-1.5-.67-1.5-1.5S11.17 13 12 13s1.5.67 1.5 1.5S12.83 16 12 16z"/>
+                        </svg>
+                    </div>
+                    <h3 class="slot-title" id="slot-t1">O Próximo Destino</h3>
+                    <span class="slot-status">Selado</span>
+                </div>
+
+                <!-- Slot 2 -->
+                <div class="locked-slot" onclick="openLockedModal('slot2')">
+                    <div class="slot-blur-layer"></div>
+                    <div class="lock-container">
+                        <svg class="lock-icon-svg" viewBox="0 0 24 24">
+                            <path d="M12 2C9.24 2 7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5zm-3 5c0-1.66 1.34-3 3-3s3 1.34 3 3v3H9V7zm3 9c-.83 0-1.5-.67-1.5-1.5S11.17 13 12 13s1.5.67 1.5 1.5S12.83 16 12 16z"/>
+                        </svg>
+                    </div>
+                    <h3 class="slot-title" id="slot-t2">Um Jantar sob as Estrelas</h3>
+                    <span class="slot-status">Selado</span>
+                </div>
+
+                <!-- Slot 3 -->
+                <div class="locked-slot" onclick="openLockedModal('slot3')">
+                    <div class="slot-blur-layer"></div>
+                    <div class="lock-container">
+                        <svg class="lock-icon-svg" viewBox="0 0 24 24">
+                            <path d="M12 2C9.24 2 7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5zm-3 5c0-1.66 1.34-3 3-3s3 1.34 3 3v3H9V7zm3 9c-.83 0-1.5-.67-1.5-1.5S11.17 13 12 13s1.5.67 1.5 1.5S12.83 16 12 16z"/>
+                        </svg>
+                    </div>
+                    <h3 class="slot-title" id="slot-t3">O Próximo Segredo</h3>
+                    <span class="slot-status">Selado</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SISTEMA DE MODAIS DINÂMICOS -->
+    
+    <!-- Lightbox de Fotos -->
+    <div id="lightbox-modal" class="modal-overlay" onclick="closeLightbox()">
+        <div class="modal-container" style="max-width: 90vw; max-height: 90vh; background: transparent; border: none; box-shadow: none;" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" style="top: 10px; right: 10px;" onclick="closeLightbox()">&times;</button>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img id="lightbox-img" src="" alt="Ampliação" style="max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px; border: 1px solid var(--accent-purple); box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Relicário Bloqueado (Poético) -->
+    <div id="locked-modal" class="modal-overlay" onclick="closeLockedModal(event)">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeLockedModal(event)">&times;</button>
+            <div class="modal-layout-center">
+                <div class="modal-center-decor">💜</div>
+                <p class="modal-body-center" id="locked-modal-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ GÓTICO -->
+    <footer class="gothic-footer">
+        <p>&copy; 2026. Letícia.</p>
+    </footer>
+
+    <!-- --------------------------------------------------
+       LÓGICA DE COMPORTAMENTO & DADOS (JAVASCRIPT)
+       -------------------------------------------------- -->
+    <script>
+        // III.3 VARIÁVEIS GLOBAIS DE FÁCIL ACESSO
+        const CONFIGURACAO_SANTUARIO = {
+            // Geral
+            titulo: "Letícia",
+            subtitulo: "Uma base sólida criada para comportar um sentimento denso por você. Não duvida disso.",
+            dataInicio: "2026-04-04T00:00:00-03:00",
+            
+            // Playlist de Trilhas Sonoras Reais
+            trilhas: [
+                {
+                    titulo: "Pixelated Kisses",
+                    artista: "Joji",
+                    path: "assets/pixelated_kisses.mp3",
+                    cover: "assets/pixelated_kisses.png",
+                    labelColor: "radial-gradient(circle, #a855f7 0%, #581c87 70%, #000000 100%)"
+                },
+                {
+                    titulo: "Into It",
+                    artista: "Chase Atlantic",
+                    path: "assets/into_it.mp3",
+                    cover: "assets/into_it.png",
+                    labelColor: "radial-gradient(circle, #800080 0%, #4b0082 70%, #000000 100%)"
+                },
+                {
+                    titulo: "Here Without You",
+                    artista: "3 Doors Down",
+                    path: "assets/here_without_you.mp3",
+                    cover: "assets/here_without_you.png",
+                    labelColor: "radial-gradient(circle, #a855f7 0%, #581c87 70%, #000000 100%)"
+                },
+                {
+                    titulo: "Friends",
+                    artista: "Chase Atlantic",
+                    path: "assets/friends.mp3",
+                    cover: "assets/friends.png",
+                    labelColor: "radial-gradient(circle, #c084fc 0%, #581c87 70%, #000000 100%)"
+                }
+            ],
+
+            // Módulo 1: O Altar do Agora (Textos e Imagens dos 5 Nós do Prisma)
+            momentos: {
+                encontro: {
+                    titulo: "Encontro",
+                    texto: `<div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[02/05/2026 - 00:31]</span></span>
+                                <span class="chat-text">"se não, eu não teria chamado você"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[02/05/2026 - 00:32]</span></span>
+                                <span class="chat-text">"se eu não tivesse te chamado, eu não teria terminado"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[02/05/2026 - 00:45]</span></span>
+                                <span class="chat-text">"Eu disse que criei uma base sólida para comportar um sentimento denso por você"</span>
+                            </div>`,
+                    imagem: "assets/flores.jpeg"
+                },
+                conexao: {
+                    titulo: "Conexão",
+                    texto: `<div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[02/05/2026 - 00:31]</span></span>
+                                <span class="chat-text">"eu quis antes, eu quis agora"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[02/05/2026 - 00:41]</span></span>
+                                <span class="chat-text">"Criar e moldar são coisas diferentes... E como ele é moldado é que define se é forte ou não."</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[02/05/2026 - 02:08]</span></span>
+                                <span class="chat-text">"Você me faz ter as melhores decisões"</span>
+                            </div>`,
+                    imagem: "assets/mdserreiasbatida.jpeg"
+                },
+                sintonia: {
+                    titulo: "Sintonia",
+                    texto: `<div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[07/05/2026 - 02:15]</span></span>
+                                <span class="chat-text">"minha mãe disse que vc era fofo pq eu tinha ficado agoniada sem conseguir ler direito e vc tava dizendo pra ter calma"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[07/05/2026 - 02:14]</span></span>
+                                <span class="chat-text">"vc precisou de ajuda. pouco importa o remédio. sua mãe, são prioridades."</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[07/05/2026 - 02:37]</span></span>
+                                <span class="chat-text">"vc nunca atrapalha nada. lembre disso. entendeu?"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[07/05/2026 - 02:15]</span></span>
+                                <span class="chat-text">"obrigada mesmo, meu bem. pelo apoio moral TB."</span>
+                            </div>`,
+                    imagem: "assets/maonorosto.jpeg"
+                },
+                cuidado: {
+                    titulo: "Cuidado",
+                    texto: `<div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[07/05/2026 - 21:13]</span></span>
+                                <span class="chat-text">"gosto da certeza"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[07/05/2026 - 21:14]</span></span>
+                                <span class="chat-text">"eu tenho certeza que tô com sdd"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[07/05/2026 - 21:16]</span></span>
+                                <span class="chat-text">"vc é o amor da minha vida"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[07/05/2026 - 21:22]</span></span>
+                                <span class="chat-text">"vc é o amor da minha vida"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[07/05/2026 - 21:23]</span></span>
+                                <span class="chat-text">"eu te amo muito muito muito"</span>
+                            </div>`,
+                    imagem: "assets/lindadms.jpeg"
+                },
+                agora: {
+                    titulo: "Agora",
+                    texto: `<div class="chat-dialogue">
+                                <span class="chat-author princesa">Princesa <span class="chat-time">[09/05/2026 - 19:12]</span></span>
+                                <span class="chat-text">"quer me ligar hoje?"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[09/05/2026 - 19:13]</span></span>
+                                <span class="chat-text">"sempre quero"</span>
+                            </div>
+                            <div class="chat-dialogue">
+                                <span class="chat-author leo">Leo <span class="chat-time">[09/05/2026 - 19:20]</span></span>
+                                <span class="chat-text">"quero vc"</span>
+                            </div>`,
+                    imagem: "assets/afoto4.jpeg"
+                }
+            },
+
+            // Módulo 2: O Decodificador de Sintonia (Crônicas de Casal baseadas nos logs)
+            cronicas: {
+                frequencia: {
+                    titulo: "O Sentimento Denso",
+                    texto: "Eu disse que criei uma base sólida para comportar um sentimento denso por você. Criar e moldar são coisas diferentes. E como ele é moldado é que define se é forte ou não."
+                },
+                quietude: {
+                    titulo: "A Certeza",
+                    texto: "— Gosto da certeza. — Eu tenho certeza que tô com sdd. Vc é o amor da minha vida. Eu te amo muito muito muito. Eu tô ansioso pra te ver."
+                },
+                horasMortas: {
+                    titulo: "O Apoio",
+                    texto: "— Atrapalhei completamente seu dia amanhã. — Não, vc nunca atrapalha nada. Lembre disso. Entendeu? Eu fico muito feliz em ajudar, isso me gratifica."
+                }
+            },
+
+            // Módulo 3: O Relicário Desfocado (Dicas ao pairar os slots trancados)
+            relicario: {
+                slot1: {
+                    titulo: "O Próximo Destino",
+                    mensagem: "Ainda vamos viajar e conhecer novos lugares juntos. Em breve."
+                },
+                slot2: {
+                    titulo: "Um Jantar sob as Estrelas",
+                    mensagem: "Nosso jantar especial sob as estrelas. Ainda vamos viver isso."
+                },
+                slot3: {
+                    titulo: "O Próximo Segredo",
+                    mensagem: "O próximo passo da nossa história. No tempo certo."
+                }
+            }
+        };
+
+        // Banco de Letras Timed (Sincronismo em segundos — verificado manualmente)
+        const LETRAS_PLAYLIST = {
+            // Pixelated Kisses - Joji (começa a cantar por volta de 14s)
+            0: [
+                { time: 0,   text: "🎶" },
+                { time: 14,  text: "Pixelated kisses got me goin' insane" },
+                { time: 18,  text: "Replicate this moment from a million miles away" },
+                { time: 22,  text: "Waiting for the signal, baby, never make a sound" },
+                { time: 27,  text: "If you never hear from me, all the satellites are down" },
+                { time: 32,  text: "Yeah, they're all fuckin' down" },
+                { time: 35,  text: "Falling through the atmosphere right now" },
+                { time: 40,  text: "Baby, are you really down?" },
+                { time: 43,  text: "Baby, are you really down?" },
+                { time: 47,  text: "🎶" },
+                { time: 52,  text: "Pixelated kisses got me goin' insane" },
+                { time: 56,  text: "Replicate this moment from a million miles away" },
+                { time: 60,  text: "Waiting for the signal, baby, never make a sound" },
+                { time: 64,  text: "If you never hear from me, all the satellites are down" },
+                { time: 69,  text: "Yeah, they're all fuckin' down" },
+                { time: 72,  text: "Falling through the atmosphere right now" },
+                { time: 77,  text: "Baby, are you really down?" },
+                { time: 80,  text: "Baby, are you really down?" },
+                { time: 84,  text: "🎶" }
+            ],
+            // Into It - Chase Atlantic
+            1: [
+                { time: 0,   text: "🎶" },
+                { time: 13,  text: "Yeah, I've been catching planes for the fun of it" },
+                { time: 17,  text: "Then I've been watching fame turn to punishment" },
+                { time: 21,  text: "The weather's only sunny when I'm under it" },
+                { time: 25,  text: "And I haven't really changed, yeah, I'm just confident" },
+                { time: 30,  text: "I'm just fucking lucky I was born with it" },
+                { time: 34,  text: "A hundred million people couldn't deal with this" },
+                { time: 38,  text: "I've been trying grow 'cause people kill for it" },
+                { time: 42,  text: "This mental pressure got me popping pills and shit" },
+                { time: 47,  text: "But I'm into it, I'm into it" },
+                { time: 51,  text: "Say she wanna fuck me later" },
+                { time: 54,  text: "Girl, I'm into it, I'm into it, I'm into it" },
+                { time: 58,  text: "This mental pressure got me popping pills and shit" },
+                { time: 62,  text: "But I'm into it, I'm into it" },
+                { time: 66,  text: "I'm getting way too deep" },
+                { time: 68,  text: "I'm fucking into it" },
+                { time: 71,  text: "I am into it, yeah, I'm into it" },
+                { time: 74,  text: "I wouldn't change it for the world" },
+                { time: 77,  text: "I'm fucking into it" }
+            ],
+            // Here Without You - 3 Doors Down
+            2: [
+                { time: 0,   text: "🎶" },
+                { time: 17,  text: "A hundred days have made me older" },
+                { time: 22,  text: "Since the last time that I saw your pretty face" },
+                { time: 28,  text: "A thousand lies have made me colder" },
+                { time: 34,  text: "And I don't think I can look at this the same" },
+                { time: 40,  text: "But all the miles that separate" },
+                { time: 44,  text: "They disappear now when I'm dreaming of your face" },
+                { time: 50,  text: "I'm here without you, baby" },
+                { time: 55,  text: "But you're still on my lonely mind" },
+                { time: 60,  text: "I think about you, baby" },
+                { time: 64,  text: "And I dream about you all the time" },
+                { time: 68,  text: "I'm here without you, baby" },
+                { time: 73,  text: "But you're still with me in my dreams" },
+                { time: 78,  text: "And tonight, it's only you and me" },
+                { time: 83,  text: "🎶" },
+                { time: 100, text: "The miles just keep rollin'" },
+                { time: 104, text: "As the people leave their way to say hello" },
+                { time: 109, text: "I've heard this life is overrated" },
+                { time: 113, text: "But I hope that it gets better as we go" },
+                { time: 119, text: "I'm here without you, baby" },
+                { time: 124, text: "But you're still on my lonely mind" },
+                { time: 129, text: "I think about you, baby" },
+                { time: 133, text: "And I dream about you all the time" },
+                { time: 137, text: "I'm here without you, baby" },
+                { time: 142, text: "But you're still with me in my dreams" },
+                { time: 147, text: "And tonight, it's only you and me" }
+            ],
+            // Friends - Chase Atlantic
+            3: [
+                { time: 0,   text: "🎶" },
+                { time: 16,  text: "All of your friends have been here for too long" },
+                { time: 20,  text: "They must be waiting for you to move on" },
+                { time: 24,  text: "Girl, I'm not with it, I'm way too far gone" },
+                { time: 29,  text: "And what the hell were we?" },
+                { time: 32,  text: "And what the hell were we?" },
+                { time: 36,  text: "Tell me we're more than just friends" },
+                { time: 39,  text: "This isn't how the story ends" },
+                { time: 43,  text: "Tell me we're more than just friends" },
+                { time: 46,  text: "This isn't how the story ends" },
+                { time: 50,  text: "🎶" },
+                { time: 62,  text: "I've been waiting so long" },
+                { time: 65,  text: "I know I've kept you waiting" },
+                { time: 68,  text: "Watching me, watching you fade away" },
+                { time: 72,  text: "Tell me we're more than just friends" },
+                { time: 76,  text: "This isn't how the story ends" },
+                { time: 79,  text: "Tell me we're more than just friends" },
+                { time: 83,  text: "This isn't how the story ends" }
+            ]
+        };
+
+        // Estado do Player de Vinil (Declarado cedo para evitar TDZ)
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let isSwapping = false;
+        let trackAudio = new Audio(CONFIGURACAO_SANTUARIO.trilhas[currentTrackIndex].path);
+        trackAudio.loop = true;
+        trackAudio.volume = 0.5; // Autoplay com 50% de volume por padrão
+        let lastActiveIndex = -1;
+
+        // Inicialização quando o DOM estiver pronto
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('santuario-subtitle').textContent = CONFIGURACAO_SANTUARIO.subtitulo;
+            
+            document.getElementById('cronica-t1').textContent = CONFIGURACAO_SANTUARIO.cronicas.frequencia.titulo;
+            document.getElementById('cronica-b1').textContent = CONFIGURACAO_SANTUARIO.cronicas.frequencia.texto;
+            document.getElementById('cronica-t2').textContent = CONFIGURACAO_SANTUARIO.cronicas.quietude.titulo;
+            document.getElementById('cronica-b2').textContent = CONFIGURACAO_SANTUARIO.cronicas.quietude.texto;
+            document.getElementById('cronica-t3').textContent = CONFIGURACAO_SANTUARIO.cronicas.horasMortas.titulo;
+            document.getElementById('cronica-b3').textContent = CONFIGURACAO_SANTUARIO.cronicas.horasMortas.texto;
+
+            document.getElementById('player-cover-art').src = CONFIGURACAO_SANTUARIO.trilhas[0].cover;
+            document.getElementById('player-track-title').textContent = CONFIGURACAO_SANTUARIO.trilhas[0].titulo;
+            document.getElementById('player-track-artist').textContent = CONFIGURACAO_SANTUARIO.trilhas[0].artista;
+            
+            // Cor inicial do selo do vinil
+            const label = document.getElementById('vinyl-disk-label');
+            if (label) {
+                label.style.background = CONFIGURACAO_SANTUARIO.trilhas[0].labelColor;
+            }
+            
+            // Renderizar fila inicial
+            renderQueue();
+            
+            // Renderizar letra inicial
+            renderLyrics();
+
+            document.getElementById('slot-t1').textContent = CONFIGURACAO_SANTUARIO.relicario.slot1.titulo;
+            document.getElementById('slot-t2').textContent = CONFIGURACAO_SANTUARIO.relicario.slot2.titulo;
+            document.getElementById('slot-t3').textContent = CONFIGURACAO_SANTUARIO.relicario.slot3.titulo;
+
+            // Iniciar animação das letras caindo
+            startFallingTitle();
+        });
+
+        // Lógica do Contador de Tempo Gótico
+        const tempoContadorEl = document.getElementById('tempo-contador');
+        const dataInicioObj = new Date(CONFIGURACAO_SANTUARIO.dataInicio);
+
+        function atualizarContadorTempo() {
+            const agora = new Date();
+            const diferenca = agora - dataInicioObj;
+
+            if (diferenca < 0) {
+                tempoContadorEl.innerHTML = `
+                    <div class="timer-block">
+                        <span class="timer-val">00</span>
+                        <span class="timer-lbl">Dias</span>
+                    </div>
+                    <div class="timer-block">
+                        <span class="timer-val">00</span>
+                        <span class="timer-lbl">Horas</span>
+                    </div>
+                    <div class="timer-block">
+                        <span class="timer-val">00</span>
+                        <span class="timer-lbl">Min</span>
+                    </div>
+                    <div class="timer-block">
+                        <span class="timer-val">00</span>
+                        <span class="timer-lbl">Seg</span>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalSegundos = Math.floor(diferenca / 1000);
+            const totalMinutos = Math.floor(totalSegundos / 60);
+            const totalHoras = Math.floor(totalMinutos / 60);
+            
+            const dias = Math.floor(totalHoras / 24);
+            const horas = totalHoras % 24;
+            const minutos = totalMinutos % 60;
+            const segundos = totalSegundos % 60;
+
+            const fDias = String(dias).padStart(2, '0');
+            const fHoras = String(horas).padStart(2, '0');
+            const fMinutos = String(minutos).padStart(2, '0');
+            const fSegundos = String(segundos).padStart(2, '0');
+
+            tempoContadorEl.innerHTML = `
+                <div class="timer-block">
+                    <span class="timer-val">${fDias}</span>
+                    <span class="timer-lbl">Dias</span>
+                </div>
+                <div class="timer-block">
+                    <span class="timer-val">${fHoras}</span>
+                    <span class="timer-lbl">Horas</span>
+                </div>
+                <div class="timer-block">
+                    <span class="timer-val">${fMinutos}</span>
+                    <span class="timer-lbl">Min</span>
+                </div>
+                <div class="timer-block">
+                    <span class="timer-val">${fSegundos}</span>
+                    <span class="timer-lbl">Seg</span>
+                </div>
+            `;
+        }
+
+        atualizarContadorTempo();
+        setInterval(atualizarContadorTempo, 1000);
+
+        // 1. ANIMAÇÕES DE ROLAGEM (FADE IN UP SECTIONS)
+        const sections = document.querySelectorAll('.fade-section');
+        const observerOptions = {
+            root: null,
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target); // Anima apenas uma vez ao rolar
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // 2. MOTOR DE PARTÍCULAS (CINZAS / BRASAS FLUTUANTES)
+        const embersCanvas = document.getElementById('embers-canvas');
+        const embersCtx = embersCanvas.getContext('2d');
+        let embers = [];
+        const maxEmbers = 40;
+
+        function resizeEmbersCanvas() {
+            embersCanvas.width = window.innerWidth;
+            embersCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeEmbersCanvas);
+        resizeEmbersCanvas();
+
+        class Ember {
+            constructor() {
+                this.isSpark = false;
+                this.dead = false;
+                this.reset();
+                this.y = Math.random() * embersCanvas.height; // Distribuir na primeira carga
+            }
+            reset() {
+                this.x = Math.random() * embersCanvas.width;
+                this.y = embersCanvas.height + 15;
+                this.size = Math.random() * 1.8 + 0.4;
+                this.vy = -(Math.random() * 0.7 + 0.2);
+                this.vx = Math.random() * 0.3 - 0.15;
+                this.alpha = Math.random() * 0.6 + 0.15;
+                this.fade = Math.random() * 0.0015 + 0.0008;
+                this.wobble = Math.random() * Math.PI;
+                this.wobbleSpeed = Math.random() * 0.015 + 0.005;
+            }
+            update() {
+                this.y += this.vy;
+                this.x += this.vx + Math.sin(this.wobble) * 0.12;
+                this.wobble += this.wobbleSpeed;
+                
+                // Desvanecer perto do topo (para brasas normais)
+                if (!this.isSpark && this.y < embersCanvas.height * 0.25) {
+                    this.alpha -= this.fade * 2.5;
+                }
+                // Para fagulhas customizadas, desvanecer a cada frame
+                if (this.isSpark) {
+                    this.alpha -= this.fade;
+                }
+                
+                if (this.y < -10 || this.alpha <= 0) {
+                    if (this.isSpark) {
+                        this.dead = true;
+                    } else {
+                        this.reset();
+                    }
+                }
+            }
+            draw() {
+                embersCtx.beginPath();
+                embersCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                embersCtx.fillStyle = this.isSpark 
+                    ? `rgba(168, 85, 247, ${this.alpha})` // Fagulhas roxas brilhantes
+                    : `rgba(255, 255, 255, ${this.alpha * 0.4})`; // Brasas brancas suaves (sem cinzas)
+                embersCtx.fill();
+            }
+        }
+
+        // Criar brasas
+        for (let i = 0; i < maxEmbers; i++) {
+            embers.push(new Ember());
+        }
+
+        // 3. ILUMINAÇÃO DINÂMICA DO MOUSE E TOQUE (VELA VIRTUAL)
+        const updateGlowPosition = (x, y) => {
+            document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+            document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+        };
+
+        window.addEventListener('mousemove', e => {
+            updateGlowPosition(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('touchmove', e => {
+            if (e.touches.length > 0) {
+                updateGlowPosition(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        window.addEventListener('touchstart', e => {
+            if (e.touches.length > 0) {
+                updateGlowPosition(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        // Loop principal de Renderização
+        function renderLoop() {
+            // Desenhar e filtrar Brasas
+            embersCtx.clearRect(0, 0, embersCanvas.width, embersCanvas.height);
+            embers = embers.filter(e => {
+                e.update();
+                if (e.dead) return false;
+                e.draw();
+                return true;
+            });
+
+            requestAnimationFrame(renderLoop);
+        }
+        renderLoop();
+
+        // Sintetizador de Batimento Cardíaco (Web Audio API)
+        let audioCtx = null;
+        function playHeartbeatSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                
+                const now = audioCtx.currentTime;
+                
+                // Lub (Batimento 1)
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(55, now);
+                osc1.frequency.exponentialRampToValueAtTime(10, now + 0.14);
+                
+                gain1.gain.setValueAtTime(0, now);
+                gain1.gain.linearRampToValueAtTime(1.0, now + 0.015);
+                gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+                gain1.gain.setValueAtTime(0, now + 0.15);
+                
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.16);
+                
+                // Dub (Batimento 2)
+                const delay = 0.18;
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(60, now + delay);
+                osc2.frequency.exponentialRampToValueAtTime(10, now + delay + 0.12);
+                
+                gain2.gain.setValueAtTime(0, now + delay);
+                gain2.gain.linearRampToValueAtTime(0.8, now + delay + 0.015);
+                gain2.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.12);
+                gain2.gain.setValueAtTime(0, now + delay + 0.13);
+                
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(now + delay);
+                osc2.stop(now + delay + 0.15);
+            } catch (err) {
+                console.warn("Audio Context error:", err);
+            }
+        }
+
+        // Função para iniciar a queda desajeitada das letras
+        function startFallingTitle() {
+            const container = document.getElementById('falling-title-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const name = "LETÍCIA";
+            name.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.className = 'falling-letter';
+                span.textContent = char;
+                // Atrasos e durações aleatórios para o efeito desajeitado/orgânico
+                const delay = index * 0.16 + Math.random() * 0.12;
+                const duration = 1.1 + Math.random() * 0.35;
+                span.style.animation = `fallClumsy ${duration}s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${delay}s forwards`;
+                container.appendChild(span);
+            });
+        }
+
+        // Lógica do Coração Gótico Interativo
+        function pulseHeart(e) {
+            const heartBtn = document.getElementById('gothic-heart-btn');
+            if (heartBtn.classList.contains('beating')) return;
+
+            // Batimento sintetizado
+            playHeartbeatSound();
+
+            // Ativar batimento cardíaco
+            heartBtn.classList.add('beating');
+            setTimeout(() => {
+                heartBtn.classList.remove('beating');
+            }, 600);
+
+            // Obter coordenadas para a explosão de fagulhas
+            const rect = heartBtn.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            spawnSparks(x, y);
+
+            // Reiniciar queda das letras
+            startFallingTitle();
+        }
+
+        function spawnSparks(x, y) {
+            const sparkCount = 20;
+            for (let i = 0; i < sparkCount; i++) {
+                const p = new Ember();
+                p.isSpark = true;
+                p.x = x;
+                p.y = y;
+                // Velocidades rápidas em todas as direções
+                p.vy = (Math.random() * 5.5 - 2.75);
+                p.vx = (Math.random() * 6.5 - 3.25);
+                p.size = Math.random() * 2.5 + 0.8;
+                p.alpha = 1.0;
+                p.fade = Math.random() * 0.022 + 0.014; // desvanece rápido
+                embers.push(p);
+            }
+        }
+
+        // 4. REAL PLAYER DE VINIL GÓTICO COM MULTIPLEXAÇÃO E ANIMAÇÃO DE TROCA (HTML5 AUDIO)
+        
+        const vinylDisk = document.getElementById('vinyl-disk');
+        const vinylDiskSlide = document.getElementById('vinyl-disk-slide');
+        const vinylArm = document.getElementById('vinyl-arm');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const progressFill = document.getElementById('progress-fill');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds === Infinity) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Registrar ouvintes para a trilha padrão
+        function registerAudioListeners(audioObj) {
+            audioObj.addEventListener('loadedmetadata', () => {
+                totalTimeEl.textContent = formatTime(audioObj.duration);
+            });
+
+            audioObj.addEventListener('timeupdate', () => {
+                const current = audioObj.currentTime;
+                const duration = audioObj.duration || 1;
+                const pct = (current / duration) * 100;
+                progressFill.style.width = `${pct}%`;
+                currentTimeEl.textContent = formatTime(current);
+                
+                // Sincronizar letra
+                updateLyrics(current);
+            });
+        }
+
+        // Seekable progress bar
+        const progressTrack = document.getElementById('progress-track');
+        function seekOnClick(e) {
+            const rect = progressTrack.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX) || 0) - rect.left;
+            const pct = Math.max(0, Math.min(1, x / rect.width));
+            if (trackAudio && !isNaN(trackAudio.duration)) {
+                trackAudio.currentTime = pct * trackAudio.duration;
+            }
+        }
+        progressTrack.addEventListener('click', seekOnClick);
+        progressTrack.addEventListener('touchend', seekOnClick);
+
+        // Volume control
+        const volumeSlider = document.getElementById('volume-slider');
+        let isMuted = false;
+        let lastVolume = 0.5;
+
+        function setVolume(val) {
+            const v = parseFloat(val);
+            trackAudio.volume = v;
+            lastVolume = v > 0 ? v : lastVolume;
+            isMuted = v === 0;
+            // Update track fill color via CSS custom property
+            const pct = (v * 100).toFixed(1) + '%';
+            volumeSlider.style.setProperty('--vol-pct', pct);
+            updateVolumeIcon(v);
+        }
+
+        function toggleMute() {
+            if (isMuted || trackAudio.volume === 0) {
+                trackAudio.volume = lastVolume || 0.5;
+                volumeSlider.value = trackAudio.volume;
+                isMuted = false;
+            } else {
+                lastVolume = trackAudio.volume;
+                trackAudio.volume = 0;
+                volumeSlider.value = 0;
+                isMuted = true;
+            }
+            setVolume(trackAudio.volume);
+        }
+
+        function updateVolumeIcon(v) {
+            const icon = document.getElementById('volume-icon');
+            if (!icon) return;
+            if (v === 0) {
+                icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            } else if (v < 0.5) {
+                icon.innerHTML = '<path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>';
+            } else {
+                icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+            }
+        }
+
+        // Initialize volume slider visual
+        setVolume(0.5);
+        volumeSlider.value = 0.5;
+
+        // Funções para Letras Sincronizadas
+        function renderLyrics() {
+            const scrollEl = document.getElementById('lyrics-scroll');
+            if (!scrollEl) return;
+            
+            const trackLyrics = LETRAS_PLAYLIST[currentTrackIndex] || [];
+            let html = '';
+            trackLyrics.forEach((lyric, idx) => {
+                html += `<span class="lyrics-line" id="lyric-line-${idx}">${lyric.text}</span>`;
+            });
+            scrollEl.innerHTML = html;
+            scrollEl.style.transform = 'translateY(0px)';
+        }
+
+        function updateLyrics(currentTime) {
+            const trackLyrics = LETRAS_PLAYLIST[currentTrackIndex] || [];
+            if (trackLyrics.length === 0) return;
+            
+            let activeIndex = 0;
+            for (let i = 0; i < trackLyrics.length; i++) {
+                if (currentTime >= trackLyrics[i].time) {
+                    activeIndex = i;
+                } else {
+                    break;
+                }
+            }
+            
+            if (activeIndex !== lastActiveIndex) {
+                lastActiveIndex = activeIndex;
+                
+                const lines = document.querySelectorAll('.lyrics-line');
+                lines.forEach((line, idx) => {
+                    if (idx === activeIndex) {
+                        line.classList.add('active');
+                    } else {
+                        line.classList.remove('active');
+                    }
+                });
+                
+                const scrollEl = document.getElementById('lyrics-scroll');
+                if (scrollEl) {
+                    // Cada linha tem 32px de altura; offset para centralizar no container de 112px
+                    const lineHeight = 32;
+                    const containerHeight = 112;
+                    const centerOffset = Math.floor((containerHeight - lineHeight) / 2) - 40;
+                    scrollEl.style.transform = `translateY(${centerOffset - activeIndex * lineHeight}px)`;
+                }
+            }
+        }
+        registerAudioListeners(trackAudio);
+
+        function toggleVirtualPlayer() {
+            if (isPlaying) {
+                pauseTrack();
+            } else {
+                playTrack();
+            }
+        }
+
+        function playTrack() {
+            const currentVol = volumeSlider ? parseFloat(volumeSlider.value) : 0.5;
+            trackAudio.volume = currentVol;
+            trackAudio.play().then(() => {
+                isPlaying = true;
+                vinylDisk.classList.add('spinning');
+                vinylDiskSlide.classList.add('active-slide');
+                vinylArm.classList.add('arm-active');
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }).catch(err => {
+                console.warn("Autoplay bloqueado pelas políticas do navegador. Aguardando interação do usuário.", err);
+            });
+        }
+
+        function pauseTrack() {
+            trackAudio.pause();
+            isPlaying = false;
+            vinylDisk.classList.remove('spinning');
+            vinylDiskSlide.classList.remove('active-slide');
+            vinylArm.classList.remove('arm-active');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        }
+
+        // Renderizar a Fila de Músicas Restantes (3 Quadrados com Capa e Nome)
+        function renderQueue() {
+            const container = document.getElementById('queue-container');
+            if (!container) return;
+            
+            let html = '';
+            CONFIGURACAO_SANTUARIO.trilhas.forEach((track, idx) => {
+                if (idx === currentTrackIndex) return; // Não renderiza a que está tocando
+                
+                html += `
+                    <div class="queue-item" onclick="selectTrack(${idx})">
+                        <div class="queue-sleeve-wrapper">
+                            <div class="queue-sleeve">
+                                <img src="${track.cover}" alt="${track.titulo}">
+                            </div>
+                            <div class="queue-disk">
+                                <div class="queue-label" style="background: ${track.labelColor}"></div>
+                            </div>
+                        </div>
+                        <div class="queue-info">
+                            <span class="queue-title">${track.titulo}</span>
+                            <span class="queue-artist">${track.artista}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Trocar de faixa com animação física de troca de capa e disco
+        function selectTrack(index) {
+            if (isSwapping) return;
+            if (index === currentTrackIndex) {
+                toggleVirtualPlayer();
+                return;
+            }
+            
+            isSwapping = true;
+            
+            // 1. Pausar áudio
+            pauseTrack();
+            
+            // 2. Retrair braço mecânico e disco de volta à capa
+            vinylArm.classList.remove('arm-active');
+            vinylDisk.classList.remove('spinning');
+            vinylDiskSlide.classList.remove('active-slide');
+            
+            // 3. Slide out do disco e 3D flip do sleeve
+            const sleeve = document.getElementById('player-vinyl-sleeve');
+            vinylDiskSlide.classList.add('slide-out');
+            sleeve.classList.add('swapping-out');
+            
+            currentTrackIndex = index;
+
+            setTimeout(() => {
+                // Destruir áudio anterior
+                trackAudio.pause();
+                
+                // Instanciar novo áudio
+                trackAudio = new Audio(CONFIGURACAO_SANTUARIO.trilhas[index].path);
+                trackAudio.loop = true;
+                trackAudio.volume = volumeSlider ? parseFloat(volumeSlider.value) : 0.5; // Manter volume atual
+                registerAudioListeners(trackAudio);
+                
+                // Resetar letras
+                lastActiveIndex = -1;
+                renderLyrics();
+                
+                // Atualizar textos informativos do player
+                document.getElementById('player-track-title').textContent = CONFIGURACAO_SANTUARIO.trilhas[index].titulo;
+                document.getElementById('player-track-artist').textContent = CONFIGURACAO_SANTUARIO.trilhas[index].artista;
+                
+                // Atualizar capa do player principal
+                document.getElementById('player-cover-art').src = CONFIGURACAO_SANTUARIO.trilhas[index].cover;
+                
+                // Atualizar cor do rótulo
+                const label = document.getElementById('vinyl-disk-label');
+                label.style.background = CONFIGURACAO_SANTUARIO.trilhas[index].labelColor;
+                
+                // Atualizar os 3 quadrados restantes da fila
+                renderQueue();
+                
+                // Preparar animação de entrada (sleeve do outro lado, disco na capa)
+                sleeve.classList.remove('swapping-out');
+                sleeve.classList.add('swapping-prep');
+                vinylDiskSlide.classList.remove('slide-out');
+                vinylDiskSlide.classList.add('slide-in-prep');
+                
+                // Forçar Reflow para registrar o estado instantaneamente
+                sleeve.offsetWidth;
+                vinylDiskSlide.offsetWidth;
+                
+                // Executar slide-in / flip-in
+                sleeve.classList.remove('swapping-prep');
+                vinylDiskSlide.classList.remove('slide-in-prep');
+                
+                setTimeout(() => {
+                    playTrack();
+                    isSwapping = false;
+                }, 50);
+                
+            }, 600); // Coincide com a transição CSS de 0.6s
+        }
+
+        // Ativar som/música na primeira interação do usuário na página
+        function setupAutoplay() {
+            // Tentar autoplay imediato
+            playTrack();
+
+            const startPlayingOnInteraction = () => {
+                if (!isPlaying) {
+                    playTrack();
+                }
+                document.removeEventListener('click', startPlayingOnInteraction);
+                document.removeEventListener('touchstart', startPlayingOnInteraction);
+                document.removeEventListener('scroll', startPlayingOnInteraction);
+            };
+            document.addEventListener('click', startPlayingOnInteraction);
+            document.addEventListener('touchstart', startPlayingOnInteraction);
+            document.addEventListener('scroll', startPlayingOnInteraction);
+        }
+        setupAutoplay();
+
+        // 5. INTERAÇÃO E GESTÃO DOS MODAIS DINÂMICOS & LIGHTBOX
+        
+        // Lightbox de Fotos (Módulo 1)
+        const lightboxModal = document.getElementById('lightbox-modal');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(imgSrc) {
+            lightboxImg.src = imgSrc;
+            lightboxModal.classList.add('active-modal');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightboxModal.classList.remove('active-modal');
+            document.body.style.overflow = '';
+        }
+
+        // Modal Relicário Bloqueado (Módulo 3)
+        const lockedModal = document.getElementById('locked-modal');
+        const lockedModalMessage = document.getElementById('locked-modal-message');
+
+        function openLockedModal(slotKey) {
+            const data = CONFIGURACAO_SANTUARIO.relicario[slotKey];
+            if (data) {
+                lockedModalMessage.textContent = data.mensagem;
+                
+                lockedModal.classList.add('active-modal');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLockedModal(event) {
+            lockedModal.classList.remove('active-modal');
+            document.body.style.overflow = '';
+        }
+
+        // Renderização Dinâmica dos Momentos
+        function renderizarMomentos() {
+            const container = document.getElementById('prisma-moments-container');
+            if (!container) return;
+
+            let html = '';
+            const chaves = ['encontro', 'conexao', 'sintonia', 'cuidado', 'agora'];
+            const datas = ['02/05/2026', '02/05/2026', '07/05/2026', '07/05/2026', '09/05/2026'];
+
+            chaves.forEach((chave, index) => {
+                const data = CONFIGURACAO_SANTUARIO.momentos[chave];
+                if (!data) return;
+
+                let imagemHtml = '';
+                if (data.imagem) {
+                    imagemHtml = `
+                        <div class="moment-image-col">
+                            <div class="gothic-arch-frame small-arch" onclick="openLightbox('${data.imagem}')">
+                                <img src="${data.imagem}" alt="${data.titulo}" class="gothic-arch-img">
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="glass-card moment-card">
+                        ${imagemHtml}
+                        <div class="moment-content-col">
+                            <div class="card-header-decor" style="justify-content: flex-end;">
+                                <span>${datas[index]}</span>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                ${data.texto}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Inicializar momentos
+        renderizarMomentos();
+
+        // Fechar modais com tecla Esc
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeLockedModal();
+            }
+        });
+    </script>
+</body>
+</html>
