@@ -1525,9 +1525,94 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(88, 28, 135, 0.06), inset 0 0 20px rgba(88, 28, 135, 0.04); 
             }
         }
+        /* -------------------------------------------------- 
+           TELA DE ENTRADA GÓTICA (resolve autoplay)
+           -------------------------------------------------- */
+        #entry-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.9s ease, visibility 0.9s ease;
+        }
+        #entry-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .entry-heart {
+            width: 80px;
+            height: 80px;
+            animation: entryPulse 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.7));
+            margin-bottom: 2rem;
+        }
+        @keyframes entryPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5)); }
+            50% { transform: scale(1.12); filter: drop-shadow(0 0 28px rgba(168, 85, 247, 0.9)); }
+        }
+        .entry-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #ffffff;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .entry-subtitle {
+            font-family: var(--font-manuscript);
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: rgba(168, 85, 247, 0.8);
+            margin-bottom: 3rem;
+        }
+        .entry-btn {
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            background: transparent;
+            color: #ffffff;
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            letter-spacing: 0.25rem;
+            text-transform: uppercase;
+            padding: 0.9rem 2.8rem;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: entryBlink 2.5s ease-in-out infinite;
+        }
+        .entry-btn:hover {
+            background: rgba(88, 28, 135, 0.3);
+            border-color: rgba(168, 85, 247, 0.9);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+        @keyframes entryBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
     </style>
 </head>
 <body>
+    <!-- Tela de Entrada Gótica (necessária para autoplay nos navegadores modernos) -->
+    <div id="entry-overlay" onclick="entrarNoSantuario()">
+        <svg class="entry-heart" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="entry-grad" cx="50%" cy="40%" r="50%">
+                    <stop offset="0%" stop-color="#c084fc" />
+                    <stop offset="40%" stop-color="#581c87" />
+                    <stop offset="100%" stop-color="#1a0030" />
+                </radialGradient>
+            </defs>
+            <path d="M50 25 C37 5 8 10 8 42 C8 68 42 82 50 95 C58 82 92 68 92 42 C92 10 63 5 50 25 Z" fill="url(#entry-grad)" stroke="rgba(168,85,247,0.4)" stroke-width="1" />
+        </svg>
+        <h1 class="entry-title">Letícia</h1>
+        <p class="entry-subtitle">Leo &amp; Letícia — A Nossa Sintonia</p>
+        <button class="entry-btn">Entrar</button>
+    </div>
     <!-- Fundo de Galáxia Gótica Animada (Roxo e Azul) -->
     <div class="gothic-galaxy-bg"></div>
 
@@ -2034,6 +2119,14 @@
         trackAudio.loop = true;
         trackAudio.volume = 0.5; // Autoplay com 50% de volume por padrão
         let lastActiveIndex = -1;
+
+        // Tela de Entrada Gótica — resolve autoplay
+        function entrarNoSantuario() {
+            const overlay = document.getElementById('entry-overlay');
+            overlay.classList.add('hidden');
+            // Iniciar música após interação do usuário (agora permitido pelo navegador)
+            playTrack();
+        }
 
         // Inicialização quando o DOM estiver pronto
         window.addEventListener('DOMContentLoaded', () => {
